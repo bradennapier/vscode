@@ -33,7 +33,7 @@ export interface MarkdownRenderOptions extends FormattedTextRenderOptions {
  */
 export function renderMarkdown(markdown: IMarkdownString, options: MarkdownRenderOptions = {}, markedOptions: MarkedOptions = {}): HTMLElement {
 	const element = createElement(options);
-
+	console.log(markdown, options, markedOptions);
 	const _uriMassage = function (part: string): string {
 		let data: any;
 		try {
@@ -138,7 +138,11 @@ export function renderMarkdown(markdown: IMarkdownString, options: MarkdownRende
 		}
 	};
 	renderer.paragraph = (text): string => {
+		console.log('p: ', text);
 		return `<p>${markdown.supportThemeIcons ? renderCodicons(text) : text}</p>`;
+	};
+	renderer.table = (header, rows) => {
+		return `<table>${header}${rows}</table>`;
 	};
 
 	if (options.codeBlockRenderer) {
@@ -228,7 +232,7 @@ export function renderMarkdown(markdown: IMarkdownString, options: MarkdownRende
 		// allowedTags should included everything that markdown renders to.
 		// Since we have our own sanitize function for marked, it's possible we missed some tag so let insane make sure.
 		// HTML tags that can result from markdown are from reading https://spec.commonmark.org/0.29/
-		allowedTags: ['ul', 'li', 'p', 'code', 'blockquote', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'em', 'pre', 'table', 'tr', 'td', 'div', 'del', 'a', 'strong', 'br', 'img', 'span'],
+		allowedTags: ['ul', 'li', 'p', 'code', 'blockquote', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'em', 'pre', 'table', 'tr', 'th', 'td', 'div', 'del', 'a', 'strong', 'br', 'img', 'span'],
 		allowedAttributes: {
 			'a': ['href', 'name', 'target', 'data-href'],
 			'img': ['src', 'title', 'alt', 'width', 'height'],
